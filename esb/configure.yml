@@ -1,0 +1,14 @@
+---
+- name: Configure ESB
+  hosts: all
+  become: true
+
+  vars:
+    version: "3.4.2"
+    install_dir: "/opt/esb"
+    port: 8161
+
+  tasks:
+    - name: Print variables
+      ansible.builtin.debug:
+        msg: "Configure ESB {{ version }} on {{ inventory_hostname }}"
