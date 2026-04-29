@@ -1,0 +1,28 @@
+---
+- name: Create application directories
+  hosts: all
+  become: true
+
+  vars:
+    base_dir: "/opt/esb"
+    dir_owner: "scheduler"
+    dir_group: "scheduler"
+    directories:
+      - "{{ base_dir }}/conf"
+      - "{{ base_dir }}/logs"
+      - "{{ base_dir }}/data"
+      - "{{ base_dir }}/tmp"
+
+  tasks:
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ dir_owner }}"
+        group: "{{ dir_group }}"
+        mode: "0755"
+      loop: "{{ directories }}"
+
+    - name: Confirm directories created
+      ansible.builtin.debug:
+        msg: "Created {{ directories | length }} directories under {{ base_dir }} on {{ inventory_hostname }}"
