@@ -1,0 +1,20 @@
+---
+- name: Health Check ACP
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Check ACP process is running
+      ansible.builtin.shell:
+        cmd: "systemctl is-active acp"
+      register: acp_status
+      changed_when: false
+
+    - name: Report status
+      ansible.builtin.debug:
+        msg: "ACP status on {{ inventory_hostname }}: {{ acp_status.stdout }}"
+
+    - name: Fail if ACP is not running
+      ansible.builtin.fail:
+        msg: "ACP is not running!"
+      when: acp_status.stdout != "active"
