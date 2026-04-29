@@ -1,0 +1,36 @@
+---
+- name: Create configuration file
+  hosts: all
+  become: true
+
+  vars:
+    file_path: "/opt/esb/conf/esb.conf"
+    file_owner: "scheduler"
+    file_group: "scheduler"
+    file_content: |
+      # ESB Configuration
+      port=8161
+      enable_ssl=true
+      log_level=INFO
+
+  tasks:
+    - name: Ensure parent directory exists
+      ansible.builtin.file:
+        path: "{{ file_path | dirname }}"
+        state: directory
+        owner: "{{ file_owner }}"
+        group: "{{ file_group }}"
+        mode: "0755"
+
+    - name: Create configuration file
+      ansible.builtin.copy:
+        content: "{{ file_content }}"
+        dest: "{{ file_path }}"
+        owner: "{{ file_owner }}"
+        group: "{{ file_group }}"
+        mode: "0644"
+        backup: true
+
+    - name: Confirm file created
+      ansible.builtin.debug:
+        msg: "File {{ file_path }} created on {{ inventory_hostname }}"
