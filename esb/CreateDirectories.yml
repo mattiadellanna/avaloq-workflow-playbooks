@@ -5,7 +5,7 @@
   gather_facts: false
   
   vars:
-    base_dir: "Pii"
+    base_dir: {{ base_dir }}
   
   tasks:
     - name: Create base directory
