@@ -3,7 +3,10 @@
   hosts: all
   connection: {{ host }}
   gather_facts: false
-
+  
+  vars:
+    base_dir: {{ base_dir }}
+  
   tasks:
     - name: Create base directory
       ansible.builtin.file:
