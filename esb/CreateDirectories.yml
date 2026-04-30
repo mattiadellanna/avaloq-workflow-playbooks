@@ -1,7 +1,7 @@
 ---
 - name: Create directory from variables
   hosts: all
-  connection: local
+  connection: {{ host }}
   gather_facts: false
 
   tasks:
@@ -16,8 +16,8 @@
         path: "{{ base_dir }}/{{ item.name }}"
         state: directory
         mode: "{{ item.mode | default('0755') }}"
-      loop: "{{ subdirs }}"
+      loop: "{{ sub_dirs }}"
 
     - name: Print summary
       ansible.builtin.debug:
-        msg: "Created {{ subdirs | length }} subdirs under {{ base_dir }} on {{ inventory_hostname }}"
+        msg: "Created {{ sub_dirs | length }} sub directories under {{ base_dir }} on {{ host }}"
